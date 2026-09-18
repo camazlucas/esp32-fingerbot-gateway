@@ -1,0 +1,19 @@
+# Segredos - NUNCA sobem pro GitHub (senha de Wi-Fi, chaves do Fingerbot,
+# chaves da API Tuya). Cada pasta de sketch tem um secrets.h.example como
+# modelo - copie pra secrets.h e preencha com seus dados.
+secrets.h
+
+# Arquivos gerados pelo tinytuya wizard - contêm local_key de TODOS os seus
+# dispositivos Tuya (não só o Fingerbot) e a API key/secret da Tuya Cloud.
+devices.json
+snapshot.json
+tinytuya.json
+tuya-raw.json
+
+# Ambiente virtual Python (tinytuya)
+venv/
+
+# Artefatos de build do Arduino
+build/
+*.bin
+*.elf
