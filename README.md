@@ -6,6 +6,8 @@ muda, aciona via Bluetooth Low Energy (BLE) um **Fingerbot** (robozinho que
 aperta botões físicos) instalado no botão de power do PC. Objetivo: ligar o
 PC de fora de casa, sem depender de o PC já estar ligado.
 
+**Quer montar isso do zero? Veja o [guia passo a passo](GUIA-PASSO-A-PASSO.md).**
+
 ## Como funciona
 
 ```
@@ -32,11 +34,23 @@ PC de fora de casa, sem depender de o PC já estar ligado.
    a si mesma (necessário: usar BLE nessa placa consome memória que o
    Wi-Fi/HTTPS não recupera sozinho até reiniciar).
 
-## Pastas
+## Estrutura das pastas
 
-- **`GatewayFingerbot/`** — firmware final (Wi-Fi + Firebase + BLE juntos). É o que roda na ESP32 no dia a dia.
-- **`TuyaFingerbotClick/`** — sketch de teste isolado, só do Bluetooth (sem Wi-Fi), útil pra debugar o Fingerbot sozinho.
-- **`test_wifi/`** — sketch de teste isolado, só do Wi-Fi + polling no Firebase (etapa inicial do projeto).
+```
+firmware/
+  GatewayFingerbot/    <- O SCRIPT PRINCIPAL. É o único que roda na ESP32
+                          no dia a dia (Wi-Fi + Firebase + Bluetooth juntos).
+testes/
+  TuyaFingerbotClick/  <- Sketch de teste, só do Bluetooth (sem Wi-Fi).
+                          Usado pra debugar o Fingerbot isoladamente.
+  test_wifi/           <- Sketch de teste, só do Wi-Fi + polling no
+                          Firebase (primeira etapa do projeto).
+```
+
+Cada pasta acima é um **sketch do Arduino IDE** independente (abra a pasta
+inteira, não só o `.ino`, pelo Arduino IDE). Só o `firmware/GatewayFingerbot`
+precisa ficar rodando na ESP32; os dois de `testes/` existem só como
+histórico e ferramenta de debug caso algo pare de funcionar.
 
 ## Hardware
 
@@ -47,16 +61,7 @@ PC de fora de casa, sem depender de o PC já estar ligado.
 
 Cada pasta de sketch tem um `secrets.h.example`. Copie para `secrets.h` (mesma
 pasta) e preencha com seus dados reais — esse arquivo fica de fora do Git.
-
-Para o `GatewayFingerbot`, você precisa:
-
-- **Wi-Fi:** SSID e senha da sua rede.
-- **Firebase:** a URL do campo no seu Realtime Database.
-- **Credenciais do Fingerbot** (`device_id`, `local_key`, `uuid`, `mac`):
-  extraídas pareando o dispositivo no app **Smart Life**, criando um projeto
-  na [Tuya IoT Platform](https://iot.tuya.com) e rodando
-  `python -m tinytuya wizard`
-  ([tinytuya](https://github.com/jasonacox/tinytuya)).
+Detalhes de como conseguir cada dado estão no [guia passo a passo](GUIA-PASSO-A-PASSO.md).
 
 ## Configuração do Arduino IDE
 
@@ -73,7 +78,7 @@ leitura/escrita **públicas** (qualquer pessoa com a URL consegue ler ou
 escrever nele). Como esse projeto usa o Firebase só como um "interruptor"
 remoto, o ideal é pelo menos restringir a escrita (ex.: regras que exigem
 autenticação, ou trocar a URL do campo por algo não-adivinhável). Isso ainda
-não foi configurado — ver `contexto.md` para o estado atual do projeto.
+não foi configurado.
 
 ## Protocolo Tuya BLE (referências usadas)
 
